@@ -10,7 +10,8 @@ const auth = async (req, res, next) => {
     }
 
     const payload = jwt.verify(jwtToken, process.env.JWT_SECRET);
-    req.user = payload.user;
+    req.user = payload.user.id;
+    req.role = payload.user.role;
     next();
   } catch (err) {
     console.error(err.message);

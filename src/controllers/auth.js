@@ -53,7 +53,15 @@ const login = async (req, res) => {
       return res.status(401).json("Password or Email incorrect");
     }
     const token = jwtGenerator(user.rows[0].user_id, user.rows[0].user_role);
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        id: user.rows[0].user_id,
+        name: user.rows[0].user_name,
+        email: user.rows[0].user_email,
+        role: user.rows[0].user_role,
+      },
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -70,4 +78,27 @@ const verified = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verified };
+const getRoles = async (req, res) => {
+  try {
+    //req.user set by the auth middleware
+    const userId = req.user;
+
+    const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
+      userId,
+    ]);
+
+    if (user.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({
+      user: user.rows[0].user_id,
+      role: user.rows[0].user_role,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = { register, login, verified, getRoles };
