@@ -9,7 +9,13 @@ CREATE TABLE users(
     user_role VARCHAR(10) DEFAULT 'user'
 );
 
-INSERT INTO users(user_name, user_email, user_password)VALUES('John', 'john@example.com', 'example321');
+CREATE TABLE products(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    sizes JSONB NOT NULL,
+    img TEXT NOT NULL, --url
+    type VARCHAR(100),
+    flavours TEXT[] NOT NULL
+);
 
-
---insert users
