@@ -133,7 +133,7 @@ const seedProducts = async (req, res) => {
       {
         name: "Squid Game",
         description:
-          "You are allowed to move forward when 'it' shouts out, 'Green Light'; stop when 'it' shouts 'Red Light.' If your movement is detected afterward, you will be eliminated. - Squid Game theme cake with fondant figurines of the charcters.",
+          "Squid Game theme cake with fondant figurines of the charcters.",
         sizes: {
           "2 tier 8 + 6 inch": 588,
         },
@@ -213,7 +213,7 @@ const seedProducts = async (req, res) => {
         description:
           "3D Fondant Kuromi sitting on a pink cake decorated with party borders and heart shapes",
         sizes: { "6 inch": 199, "8 inch": 269 },
-        img: "https://ibb.co/RyFVnrr",
+        img: "https://i.ibb.co/NSvHhDD/Snapseed-6.jpg",
         type: "Custom Cakes",
         flavours: ["Chocolate", "Vanilla", "Strawberry"],
       },
@@ -230,7 +230,7 @@ const seedProducts = async (req, res) => {
         description:
           "Winnie The Pooh and friends cake! All figurines are handcrafted with fondant.",
         sizes: { "2 tier 8 + 6 inch": 588 },
-        img: "https://i.ibb.co/8DF36jF/IMG-6378.jpg",
+        img: "https://i.ibb.co/xY8W3Wf/IMG-6378.jpg",
         type: "Custom Cakes",
         flavours: ["Chocolate", "Vanilla", "Strawberry"],
       },

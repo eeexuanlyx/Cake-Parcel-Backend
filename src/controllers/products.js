@@ -1,13 +1,38 @@
 const pool = require("../../db");
 
-const getAllProducts = async (req, res) => {
+//search by name and filter by type
+const getProducts = async (req, res) => {
+  const { search, type } = req.query;
+  let query = "SELECT * FROM products";
+  const values = [];
+
+  const conditions = [];
+
+  if (search) {
+    conditions.push(
+      `(name ILIKE $${values.length + 1} OR description ILIKE $${
+        values.length + 1
+      })`
+    );
+    values.push(`%${search}%`);
+  }
+
+  if (type) {
+    conditions.push(`type = $${values.length + 1}`);
+    values.push(type);
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
   try {
-    const result = await pool.query("SELECT * FROM products");
+    const result = await pool.query(query, values);
     res.status(200).json(result.rows);
   } catch (err) {
     console.error("Error fetching products:", err);
-    res.status(500).send("Error fetching products.");
+    res.status(500).send("Error fetching products");
   }
 };
 
-module.exports = { getAllProducts };
+module.exports = { getProducts };
