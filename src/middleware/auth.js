@@ -3,15 +3,14 @@ require("dotenv").config();
 
 const auth = async (req, res, next) => {
   try {
-    const jwtToken = req.header("token");
+    const jwtToken = req.header("Authorization")?.split(" ")[1];
 
     if (!jwtToken) {
       return res.status(403).json("Not Authorize");
     }
 
     const payload = jwt.verify(jwtToken, process.env.JWT_SECRET);
-    req.user = payload.user.id;
-    req.role = payload.user.role;
+    req.user = { id: payload.user.id, role: payload.user.role };
     next();
   } catch (err) {
     console.error(err.message);
