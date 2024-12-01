@@ -58,4 +58,51 @@ const addToCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart };
+const getCartItems = async (req, res) => {
+  const user_id = req.user.id;
+
+  try {
+    const cartItems = await pool.query(
+      `
+        SELECT 
+            carts.id AS cart_id,
+            carts.product_id,
+            products.name,
+            products.img,
+            carts.selected_size,
+            carts.selected_flavour,
+            carts.quantity,
+            carts.price,
+            carts.created_at
+        FROM carts
+        INNER JOIN products ON carts.product_id = products.id
+        WHERE carts.user_id = $1
+        `,
+      [user_id]
+    );
+
+    return res.status(200).json(cartItems.rows);
+  } catch (err) {
+    console.error("Error fetching cart items:", err);
+    return res.status(500).json({ message: "Failed to fetch cart items." });
+  }
+};
+
+const removeFromCart = async (req, res) => {
+  const { id } = req.params; // cart id
+  const user_id = req.user.id;
+
+  try {
+    await pool.query("DELETE FROM carts WHERE id = $1 AND user_id = $2", [
+      id,
+      user_id,
+    ]);
+
+    res.status(200).json({ message: "Item removed from cart." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+module.exports = { addToCart, getCartItems, removeFromCart };
