@@ -27,3 +27,14 @@ CREATE TABLE user_data (
     contact_number VARCHAR(20) NOT NULL,                        
     FOREIGN KEY (user_id) REFERENCES users(user_id)   
 );
+
+CREATE TABLE carts (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    product_id INT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    selected_size VARCHAR(255) NOT NULL,
+    selected_flavour TEXT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    price NUMERIC(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
