@@ -19,3 +19,11 @@ CREATE TABLE products(
     flavours TEXT[] NOT NULL
 );
 
+CREATE TABLE user_data (
+    user_id uuid PRIMARY KEY,                          
+    street_name VARCHAR(255) NOT NULL,                 
+    unit_number VARCHAR(50) NOT NULL,                           
+    postal_code VARCHAR(20) NOT NULL,                           
+    contact_number VARCHAR(20) NOT NULL,                        
+    FOREIGN KEY (user_id) REFERENCES users(user_id)   
+);

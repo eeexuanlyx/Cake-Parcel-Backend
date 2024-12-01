@@ -3,11 +3,7 @@ require("dotenv").config();
 
 const auth = async (req, res, next) => {
   try {
-    let jwtToken = req.header("Authorization")?.split(" ")[1];
-
-    if (!jwtToken) {
-      jwtToken = req.header("token");
-    }
+    const jwtToken = req.header("Authorization")?.split(" ")[1];
 
     if (!jwtToken) {
       return res.status(403).json("Not Authorize");
@@ -24,7 +20,7 @@ const auth = async (req, res, next) => {
 
 const authAdmin = (req, res, next) => {
   try {
-    const jwtToken = req.header("token");
+    const jwtToken = req.header("Authorization")?.split(" ")[1];
 
     if (!jwtToken) {
       return res.status(403).json("Not Authorized");
