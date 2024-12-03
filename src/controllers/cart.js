@@ -105,4 +105,52 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart, getCartItems, removeFromCart };
+const updateCartItem = async (req, res) => {
+  const { id } = req.params; // cart item ID
+  const { quantity, selected_flavour, selected_size } = req.body;
+  const user_id = req.user.id; // Assume `req.user.id` contains the logged-in user's ID
+
+  // Fetch the product's sizes and calculate the price for the selected size
+  const productQuery = `SELECT sizes FROM products WHERE id = (
+      SELECT product_id FROM carts WHERE id = $1
+    )`;
+  try {
+    const productResult = await pool.query(productQuery, [id]);
+    if (productResult.rows.length === 0) {
+      return res.status(404).send("Product not found");
+    }
+
+    const sizes = productResult.rows[0].sizes;
+    const newPrice = selected_size ? sizes[selected_size] : undefined;
+
+    const query = `
+        UPDATE carts
+        SET 
+          quantity = COALESCE($1, quantity), 
+          selected_flavour = COALESCE($2, selected_flavour),
+          selected_size = COALESCE($3, selected_size),
+          price = COALESCE($4, price)
+        WHERE id = $5 AND user_id = $6
+        RETURNING *;
+      `;
+
+    const { rows } = await pool.query(query, [
+      quantity,
+      selected_flavour,
+      selected_size,
+      newPrice,
+      id,
+      user_id,
+    ]);
+    if (rows.length === 0)
+      return res
+        .status(404)
+        .send("Cart item not found or not authorized to update");
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error("Error updating cart item:", error);
+    res.status(500).send("Error updating cart item");
+  }
+};
+
+module.exports = { addToCart, getCartItems, removeFromCart, updateCartItem };
