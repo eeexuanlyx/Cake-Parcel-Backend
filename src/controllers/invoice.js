@@ -37,6 +37,9 @@ const addCartToInvoice = async (req, res) => {
 
     await Promise.all(invoiceItemsPromises);
 
+    // Clear the user's cart
+    await client.query("DELETE FROM carts WHERE user_id = $1", [userId]);
+
     // Commit the transaction
     await client.query("COMMIT");
 
