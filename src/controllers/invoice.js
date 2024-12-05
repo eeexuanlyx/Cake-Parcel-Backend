@@ -29,9 +29,16 @@ const addCartToInvoice = async (req, res) => {
     // Insert into invoice_products table
     const invoiceItemsPromises = cartItems.map((item) =>
       client.query(
-        `INSERT INTO invoice_products (invoice_id, product_id, quantity, price)
-           VALUES ($1, $2, $3, $4)`,
-        [invoiceId, item.product_id, item.quantity, item.price]
+        `INSERT INTO invoice_products (invoice_id, product_id, quantity, price, selected_size, selected_flavour)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          invoiceId,
+          item.product_id,
+          item.quantity,
+          item.price,
+          item.selected_size,
+          item.selected_flavour,
+        ]
       )
     );
 

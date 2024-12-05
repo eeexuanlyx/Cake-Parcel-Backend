@@ -55,6 +55,8 @@ CREATE TABLE invoice_products (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
+    selected_size VARCHAR(255) NOT NULL,
+    selected_flavour TEXT NOT NULL,
     FOREIGN KEY (invoice_id) REFERENCES invoices(invoice_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
