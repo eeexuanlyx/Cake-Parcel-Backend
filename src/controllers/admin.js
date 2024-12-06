@@ -41,4 +41,35 @@ ORDER BY invoices.order_date DESC
   }
 };
 
-module.exports = { viewOrders };
+const updateOrderStatus = async (req, res) => {
+  const { invoiceId } = req.params; // `invoiceId` from the request URL
+  const { status } = req.body; // `status` from the request body
+
+  if (!status) {
+    return res.status(400).json({ message: "Status is required" });
+  }
+
+  const query = `
+      UPDATE invoices
+      SET status = $1
+      WHERE invoice_id = $2
+      RETURNING *;
+    `;
+
+  try {
+    const result = await pool.query(query, [status, invoiceId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Invoice not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Order status updated", order: result.rows[0] });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+module.exports = { viewOrders, updateOrderStatus };
