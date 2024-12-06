@@ -61,4 +61,36 @@ const addCartToInvoice = async (req, res) => {
   }
 };
 
-module.exports = { addCartToInvoice };
+const getMyOrders = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const query = `SELECT 
+    invoices.invoice_id,
+    products.name,
+    invoice_products.quantity,
+    invoice_products.selected_size,
+    invoice_products.selected_flavour,
+    invoice_products.price,
+    invoices.total_price,
+    invoices.order_date,
+    invoices.status
+FROM 
+    invoices 
+JOIN 
+    invoice_products ON invoices.invoice_id = invoice_products.invoice_id
+JOIN 
+    products ON invoice_products.product_id = products.id
+WHERE 
+    invoices.user_id = $1
+ORDER BY 
+    invoices.order_date DESC;
+`;
+    const { rows } = await pool.query(query, [userId]);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+};
+
+module.exports = { addCartToInvoice, getMyOrders };
