@@ -8,10 +8,12 @@ const cart = require("./src/routers/cart");
 const invoice = require("./src/routers/invoice");
 const admin = require("./src/routers/admin");
 const requests = require("./src/routers/requests");
+const striperouter = require("./src/routers/striperouter");
 
 app.use(express.json());
 app.use(cors());
 
+app.use("/api", striperouter);
 app.use("/products", products);
 app.use("/auth", auth);
 app.use("/profile", profile);
