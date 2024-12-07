@@ -309,7 +309,7 @@ const seedProducts = async (req, res) => {
         description:
           "A wedding theme bride cake. A White Cake with vintage pipings and a fondant bride with wedding dress and flower",
         sizes: { "6 inch": 149 },
-        img: "https://i.ibb.co/qRCczP7/IMG-2576.jpg",
+        img: "https://i.ibb.co/CmCg9gT/IMG-8767.jpg",
         type: "Custom Cakes",
         flavours: ["Chocolate", "Vanilla", "Strawberry"],
       },

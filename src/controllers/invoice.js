@@ -1,9 +1,9 @@
 const pool = require("../../db");
 
 const addCartToInvoice = async (req, res) => {
-  const { userId, cartItems } = req.body;
+  const { userId, cartItems, deliveryDate, deliverySlot } = req.body;
 
-  if (!userId || !cartItems || cartItems.length === 0) {
+  if (!userId || !cartItems || cartItems.length === 0 || !deliveryDate) {
     return res.status(400).json({ error: "Invalid request data" });
   }
 
@@ -19,10 +19,10 @@ const addCartToInvoice = async (req, res) => {
 
     // Insert into invoices table
     const invoiceResult = await client.query(
-      `INSERT INTO invoices (user_id, total_price) 
-         VALUES ($1, $2) 
+      `INSERT INTO invoices (user_id, total_price, delivery_date, delivery_slot) 
+         VALUES ($1, $2, $3, $4) 
          RETURNING invoice_id`,
-      [userId, totalPrice]
+      [userId, totalPrice, deliveryDate, deliverySlot]
     );
     const invoiceId = invoiceResult.rows[0].invoice_id;
 
@@ -73,6 +73,8 @@ const getMyOrders = async (req, res) => {
     invoice_products.price,
     invoices.total_price,
     invoices.order_date,
+    invoices.delivery_date,
+    invoices.delivery_slot,
     invoices.status
 FROM 
     invoices 

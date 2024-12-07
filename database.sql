@@ -45,6 +45,8 @@ CREATE TABLE invoices (
     total_price DECIMAL(10, 2) NOT NULL, 
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     shipped_date TIMESTAMP NULL, 
+    delivery_date DATE NOT NULL,
+    delivery_slot VARCHAR(20),
     status VARCHAR(50) DEFAULT 'Pending', 
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

@@ -7,6 +7,8 @@ SELECT
     invoices.invoice_id,
     invoices.total_price,
     invoices.order_date,
+    invoices.delivery_date, 
+    invoices.delivery_slot, 
     invoices.status,
     user_data.user_id,
     user_data.street_name,
