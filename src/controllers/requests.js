@@ -2,7 +2,7 @@ const pool = require("../../db");
 
 const uploadRequest = async (req, res) => {
   try {
-    const imageUrl = req.file.path; // Cloudinary URL of uploaded image
+    const imageUrl = req.file ? req.file.path : null; // Cloudinary URL of uploaded image
     const { title, description } = req.body;
 
     const query = `

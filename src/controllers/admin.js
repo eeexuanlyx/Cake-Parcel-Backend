@@ -1,3 +1,4 @@
+const { response } = require("express");
 const pool = require("../../db");
 
 const viewOrders = async (req, res) => {
@@ -74,4 +75,24 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
-module.exports = { viewOrders, updateOrderStatus };
+const viewRequests = async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT user_requests.id,
+user_requests.image_url,
+user_requests.title,
+user_requests.description,
+user_requests.created_at,
+users.user_name,
+users.user_email
+FROM user_requests 
+INNER JOIN
+users ON user_requests.user_id = users.user_id
+ORDER BY user_requests.created_at DESC`);
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching requests", error.message);
+    res.status(500).json({ error: "server error" });
+  }
+};
+
+module.exports = { viewOrders, updateOrderStatus, viewRequests };

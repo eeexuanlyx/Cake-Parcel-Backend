@@ -66,7 +66,7 @@ CREATE TABLE invoice_products (
 CREATE TABLE user_requests (
   id SERIAL PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,  -- Assuming you have a users table with UUID as user_id
-  image_url VARCHAR(255) NOT NULL,  -- To store the Cloudinary URL
+  image_url VARCHAR(255),  -- To store the Cloudinary URL
   title VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
