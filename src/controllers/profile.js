@@ -23,30 +23,37 @@ const updateUser = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const hashedPassword = password
-      ? await bcrypt.hash(password, 10)
-      : undefined;
-
-    let query = "UPDATE users SET ";
+    const fields = [];
     const values = [];
 
     if (email) {
+      fields.push("user_email = $1");
       values.push(email);
-      query += `user_email = $${values.length}`;
     }
 
-    if (hashedPassword) {
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      fields.push(`user_password = $${fields.length + 1}`);
       values.push(hashedPassword);
-      query +=
-        values.length > 1 // Check if there is second field to update
-          ? `, user_password = $${values.length}`
-          : `user_password = $${values.length}`;
     }
 
-    query += ` WHERE user_id = $${values.length + 1} RETURNING *`;
+    if (fields.length === 0) {
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
+    const query = `
+      UPDATE users
+      SET ${fields.join(", ")}
+      WHERE user_id = $${fields.length + 1}
+      RETURNING *`;
+
     values.push(userId);
 
     const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.json(result.rows[0]);
   } catch (err) {
