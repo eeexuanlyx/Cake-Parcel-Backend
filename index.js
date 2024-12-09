@@ -9,9 +9,21 @@ const invoice = require("./src/routers/invoice");
 const admin = require("./src/routers/admin");
 const requests = require("./src/routers/requests");
 const striperouter = require("./src/routers/striperouter");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 app.use(express.json());
 app.use(cors());
+
+app.use(helmet());
+app.use(limiter);
 
 app.use("/api", striperouter);
 app.use("/products", products);
