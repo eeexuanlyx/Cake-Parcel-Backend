@@ -1,6 +1,7 @@
 const pool = require("../../db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator");
+const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   try {
@@ -52,14 +53,21 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json("Password or Email incorrect");
     }
-    const token = jwtGenerator(user.rows[0].user_id, user.rows[0].user_role);
+
+    const userId = user.rows[0].user_id;
+    const userRole = user.rows[0].user_role;
+
+    const accessToken = jwtGenerator(userId, userRole, "access");
+    const refreshToken = jwtGenerator(userId, userRole, "refresh");
+
     res.json({
-      token,
+      accessToken,
+      refreshToken,
       user: {
-        id: user.rows[0].user_id,
+        id: userId,
         name: user.rows[0].user_name,
         email: user.rows[0].user_email,
-        role: user.rows[0].user_role,
+        role: userRole,
       },
     });
   } catch (err) {
@@ -78,4 +86,36 @@ const verified = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verified };
+const refreshAccessToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json("Refresh token missing");
+    }
+
+    jwt.verify(refreshToken, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        return res.status(403).json("Invalid refresh token");
+      }
+
+      const newAccessToken = jwtGenerator(
+        decoded.user.id,
+        decoded.user.role,
+        "access"
+      );
+      const newRefreshToken = jwtGenerator(
+        decoded.user.id,
+        decoded.user.role,
+        "refresh"
+      );
+
+      res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Sever Error");
+  }
+};
+
+module.exports = { register, login, verified, refreshAccessToken };

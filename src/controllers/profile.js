@@ -70,7 +70,7 @@ const getAddressContact = async (req, res) => {
     const result = await pool.query(query, [userId]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Address not found." });
+      return res.status(200).json({});
     }
 
     res.json(result.rows[0]);
