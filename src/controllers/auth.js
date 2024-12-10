@@ -91,12 +91,12 @@ const refreshAccessToken = async (req, res) => {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
-      return res.status(401).json("Refresh token missing");
+      return res.status(401).json({ error: "Refresh token missing" });
     }
 
-    jwt.verify(refreshToken, process.env.JWT_SECRET, async (err, decoded) => {
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        return res.status(403).json("Invalid refresh token");
+        return res.status(403).json({ error: "Invalid refresh token" });
       }
 
       const newAccessToken = jwtGenerator(
@@ -104,17 +104,12 @@ const refreshAccessToken = async (req, res) => {
         decoded.user.role,
         "access"
       );
-      const newRefreshToken = jwtGenerator(
-        decoded.user.id,
-        decoded.user.role,
-        "refresh"
-      );
 
-      res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+      return res.json({ accessToken: newAccessToken });
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Sever Error");
+    console.error("Error refreshing access token:", err.message);
+    return res.status(500).json({ error: "Server error" });
   }
 };
 

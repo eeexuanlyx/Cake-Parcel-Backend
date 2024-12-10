@@ -8,7 +8,7 @@ function jwtGenerator(user_id, user_role, type) {
       role: user_role,
     },
   };
-  const expiresIn = type === "access" ? "15m" : "7d";
+  const expiresIn = type === "access" ? "20m" : "7d";
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn });
 }
 
