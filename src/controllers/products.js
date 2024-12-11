@@ -3,9 +3,9 @@ const pool = require("../../db");
 //search by name and filter by type
 const getProducts = async (req, res) => {
   const { search, type } = req.query;
-  let query = "SELECT * FROM products";
-  const values = [];
 
+  const queryParts = ["SELECT * FROM products"];
+  const values = [];
   const conditions = [];
 
   if (search) {
@@ -23,8 +23,10 @@ const getProducts = async (req, res) => {
   }
 
   if (conditions.length > 0) {
-    query += " WHERE " + conditions.join(" AND ");
+    queryParts.push("WHERE " + conditions.join(" AND "));
   }
+
+  const query = queryParts.join(" ");
 
   try {
     const result = await pool.query(query, values);

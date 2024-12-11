@@ -1,4 +1,3 @@
-const { response } = require("express");
 const pool = require("../../db");
 
 const viewOrders = async (req, res) => {

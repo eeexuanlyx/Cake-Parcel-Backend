@@ -7,7 +7,6 @@ const userValidator = (req, res, next) => {
 
   //valididate registration
   if (req.path === "/register") {
-    console.log(!email.length);
     if (![email, name, password].every(Boolean)) {
       return res.json("Missing Credentials");
     } else if (!validEmail(email)) {

@@ -76,16 +76,6 @@ const login = async (req, res) => {
   }
 };
 
-const verified = async (req, res) => {
-  try {
-    res.setHeader("Content-Type", "application/json");
-    res.json({ verified: true });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ error: "Server Error" });
-  }
-};
-
 const refreshAccessToken = async (req, res) => {
   try {
     const { refreshToken } = req.body;
@@ -113,4 +103,4 @@ const refreshAccessToken = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verified, refreshAccessToken };
+module.exports = { register, login, refreshAccessToken };
