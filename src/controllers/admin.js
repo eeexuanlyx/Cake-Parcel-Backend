@@ -21,7 +21,7 @@ SELECT
     invoice_products.selected_size,
     invoice_products.selected_flavour,
     products.name AS product_name,
-	users.user_name AS user_name
+	  users.user_name AS user_name
 FROM 
     invoices
 INNER JOIN 
@@ -44,8 +44,8 @@ ORDER BY invoices.order_date DESC
 };
 
 const updateOrderStatus = async (req, res) => {
-  const { invoiceId } = req.params; // `invoiceId` from the request URL
-  const { status } = req.body; // `status` from the request body
+  const { invoiceId } = req.params;
+  const { status } = req.body;
 
   if (!status) {
     return res.status(400).json({ message: "Status is required" });

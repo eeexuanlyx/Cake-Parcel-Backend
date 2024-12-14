@@ -108,7 +108,7 @@ const removeFromCart = async (req, res) => {
 const updateCartItem = async (req, res) => {
   const { id } = req.params; // cart item ID
   const { quantity, selected_flavour, selected_size } = req.body;
-  const user_id = req.user.id; // Assume `req.user.id` contains the logged-in user's ID
+  const user_id = req.user.id;
 
   // Fetch the product's sizes and calculate the price for the selected size
   const productQuery = `SELECT sizes FROM products WHERE id = (

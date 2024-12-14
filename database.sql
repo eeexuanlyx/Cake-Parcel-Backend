@@ -1,5 +1,7 @@
 CREATE DATABASE cakeparcel;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE users(
     user_id uuid PRIMARY KEY DEFAULT
     uuid_generate_v4(),

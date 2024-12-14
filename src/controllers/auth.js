@@ -10,7 +10,6 @@ const register = async (req, res) => {
       email,
     ]);
 
-    //if user exist
     if (user.rows.length !== 0) {
       return res.status(401).send("User already exist");
     }

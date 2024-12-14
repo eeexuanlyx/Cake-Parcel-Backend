@@ -29,7 +29,7 @@ const getProducts = async (req, res) => {
   const query = queryParts.join(" ");
 
   try {
-    const result = await pool.query(query, values);
+    const result = await pool.query(query, values); //array of user inputs (parameters) that  safely binds to placeholders in the query. These parameters correspond to placeholders like $1, $2, etc., in the query string.
     res.status(200).json(result.rows);
   } catch (err) {
     console.error("Error fetching products:", err);
