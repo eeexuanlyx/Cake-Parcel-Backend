@@ -419,7 +419,7 @@ const seedProducts = async (req, res) => {
         description:
           "Quilted design Christian Dior style cake with pearls, fondant ribbon and flowers.",
         sizes: { "6 inch": 128, "8 inch": 188 },
-        img: "https://i.ibb.co/ncGyDqV/IMG-1361.jpg",
+        img: "https://i.ibb.co/9G6rrRZ/IMG-6212.jpg",
         type: "Custom Cakes",
         flavours: ["Chocolate", "Vanilla", "Strawberry"],
       },
@@ -428,7 +428,7 @@ const seedProducts = async (req, res) => {
         description:
           "Longetivity Cake with ombre navy swirls, fondant sakura, swan and longetivty buns. ",
         sizes: { "6 inch": 128, "8 inch": 188 },
-        img: "https://i.ibb.co/ncGyDqV/IMG-1361.jpg",
+        img: "https://i.ibb.co/zJm7yBC/image.png",
         type: "Custom Cakes",
         flavours: ["Chocolate", "Vanilla", "Strawberry"],
       },
